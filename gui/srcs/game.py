@@ -1,9 +1,13 @@
+""" This module contains the class Game"""
+
 import pygame
 
 from srcs.models.coordinate import Coordinate
 
 
 class Game:
+    """Class Game is the main class of the game"""
+
     screen: pygame.Surface
     running: bool
     windows_size: Coordinate
@@ -14,6 +18,7 @@ class Game:
         self.running = True
 
     def run(self) -> None:
+        """Run the game"""
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
