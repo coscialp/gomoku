@@ -1,6 +1,5 @@
 """Module unit tests for Game"""
 import pygame
-import pytest
 
 from srcs.models.coordinate import Coordinate
 from srcs.game import Game
