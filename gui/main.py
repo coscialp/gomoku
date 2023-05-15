@@ -1,3 +1,4 @@
+"""GUI commands"""
 from pprint import pprint
 import click
 
