@@ -56,7 +56,7 @@ class Menu:
         """Add a button to the menu"""
         self.__buttons.append(Button(name=name, callback=callback))
 
-    def set_default_instance(self) -> None:
+    def set_default_instance(self, app) -> None:
         """Create or update the instance of the menu"""
         self.__instance = pygame_menu.Menu(
             self.__title,
@@ -67,7 +67,7 @@ class Menu:
         )
 
         for button in self.__buttons:
-            self.__instance.add.button(button.name, button.callback, self)
+            self.__instance.add.button(button.name, button.callback, self, app)
 
     def disable(self) -> None:
         """Disable the menu"""

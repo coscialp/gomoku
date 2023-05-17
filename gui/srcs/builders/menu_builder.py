@@ -47,9 +47,9 @@ class MenuBuilder:
         self.menu.set_surface(surface)
         return self
 
-    def add_button(self, name: str, callback: Callable, *args) -> "MenuBuilder":
+    def add_button(self, name: str, callback: Callable) -> "MenuBuilder":
         """Add a button to the menu"""
-        self.menu.add_button(name, callback, *args)
+        self.menu.add_button(name, callback)
         return self
 
     def add_quit_button(self) -> "MenuBuilder":
@@ -57,7 +57,7 @@ class MenuBuilder:
         self.menu.add_button("Quit", pygame_menu.events.EXIT)
         return self
 
-    def build(self) -> Menu:
+    def build(self, app) -> Menu:
         """Build the menu"""
-        self.menu.set_default_instance()
+        self.menu.set_default_instance(app)
         return self.menu

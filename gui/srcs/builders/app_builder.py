@@ -1,4 +1,6 @@
 from typing import Callable
+
+import pygame_menu
 from srcs.models import App
 
 
