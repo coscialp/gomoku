@@ -1,9 +1,8 @@
 use super::bitboard::{Bitboard, BitboardIter};
 use super::types::{File, Rank, Square, Stone, BOARD_SIZE};
 use std::fmt;
-use std::io::empty;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Board {
     bitsets: [Bitboard; 2],
     table: [Stone; BOARD_SIZE],
