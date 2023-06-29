@@ -1,10 +1,13 @@
 use std::io::{self, Write};
+use std::str::FromStr;
 use std::sync::{
     atomic::{AtomicBool, Ordering},
     Arc,
 };
+use std::time::Duration;
 
 use crate::core::board::Board;
+use crate::engine::search::Params;
 
 pub struct Client {}
 
@@ -107,10 +110,48 @@ impl Client {
         Ok(())
     }
 
+    fn parse_millis(&self, token: Option<&str>) -> Option<Duration> {
+        if let Some(token_str) = token {
+            token_str.parse::<u64>().ok().map(|v| Duration::from_millis(v))
+        } else {
+            None
+        }
+    }
+
     fn new_search<'a, I>(&self, mut tokens: I) -> io::Result<()>
     where
         I: Iterator<Item = &'a str>,
     {
+        let mut params = Params::new();
+
+        match tokens.next() {
+            Some("wtime") => {
+                if let Some(value) = self.parse_millis(tokens.next()) {
+                    params.set_wtime(value);
+                }
+            },
+            Some("btime") => {
+                if let Some(value) = self.parse_millis(tokens.next()) {
+                    params.set_btime(value);
+                }
+            },
+            Some("winc") => {
+                if let Some(value) = self.parse_millis(tokens.next()) {
+                    params.set_winc(value);
+                }
+            },
+            Some("binc") => {
+                if let Some(value) = self.parse_millis(tokens.next()) {
+                    params.set_binc(value);
+                }
+            },
+            Some("movetime") => {
+                if let Some(value) = self.parse_millis(tokens.next()) {
+                    params.set_movetime(value);
+                }
+            },
+            _ => (),
+        }
         Ok(())
     }
 
