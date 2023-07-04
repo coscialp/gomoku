@@ -1,13 +1,12 @@
 use std::io::{self, Write};
-use std::str::FromStr;
 use std::sync::{
     atomic::{AtomicBool, Ordering},
     Arc,
 };
 use std::time::Duration;
 
-use crate::core::board::Board;
-use crate::engine::search::Params;
+use crate::core::{board::Board, types::Square};
+use crate::engine::search::{self, Params};
 
 pub struct Client {}
 
@@ -37,7 +36,7 @@ impl Client {
                 "setoption" => (),
                 "ugminewgame" => (),
                 "position" => self.set_position(&mut board, tokens)?,
-                "go" => self.new_search(tokens)?,
+                "go" => self.new_search(tokens, &board)?,
                 "stop" => self.stop_search(),
                 "quit" => break,
                 _ => println!("info string Error: unknown command '{}'", command),
@@ -112,13 +111,13 @@ impl Client {
 
     fn parse_millis(&self, token: Option<&str>) -> Option<Duration> {
         if let Some(token_str) = token {
-            token_str.parse::<u64>().ok().map(|v| Duration::from_millis(v))
+            token_str.parse::<u64>().ok().map(Duration::from_millis)
         } else {
             None
         }
     }
 
-    fn new_search<'a, I>(&self, mut tokens: I) -> io::Result<()>
+    fn new_search<'a, I>(&self, mut tokens: I, board: &Board) -> io::Result<()>
     where
         I: Iterator<Item = &'a str>,
     {
@@ -129,31 +128,61 @@ impl Client {
                 if let Some(value) = self.parse_millis(tokens.next()) {
                     params.set_wtime(value);
                 }
-            },
+            }
             Some("btime") => {
                 if let Some(value) = self.parse_millis(tokens.next()) {
                     params.set_btime(value);
                 }
-            },
+            }
             Some("winc") => {
                 if let Some(value) = self.parse_millis(tokens.next()) {
                     params.set_winc(value);
                 }
-            },
+            }
             Some("binc") => {
                 if let Some(value) = self.parse_millis(tokens.next()) {
                     params.set_binc(value);
                 }
-            },
+            }
             Some("movetime") => {
                 if let Some(value) = self.parse_millis(tokens.next()) {
                     params.set_movetime(value);
                 }
-            },
+            }
+            Some("depth") => {
+                if let Ok(value) = tokens.next().unwrap_or("").parse::<u16>() {
+                    params.set_depth(value);
+                }
+            }
+            Some("nodes") => {
+                if let Ok(value) = tokens.next().unwrap_or("").parse::<u64>() {
+                    params.set_nodes(value);
+                }
+            }
+            Some("mate") => {
+                if let Ok(value) = tokens.next().unwrap_or("").parse::<u16>() {
+                    params.set_mate(value);
+                }
+            }
+            Some("searchmoves") => {
+                let mut moves = Vec::new();
+                for token in tokens {
+                    if let Ok(value) = token.parse::<Square>() {
+                        moves.push(value);
+                    }
+                }
+                params.set_searchmoves(moves.as_slice());
+            }
             _ => (),
         }
-        Ok(())
+        search::run_search(board, &params)
     }
 
     fn stop_search(&self) {}
+}
+
+impl Default for Client {
+    fn default() -> Self {
+        Self::new()
+    }
 }
