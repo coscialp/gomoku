@@ -117,64 +117,82 @@ impl Client {
         }
     }
 
-    fn new_search<'a, I>(&self, mut tokens: I, board: &Board) -> io::Result<()>
+    fn new_search<'a, I>(&self, tokens: I, board: &Board) -> io::Result<()>
     where
         I: Iterator<Item = &'a str>,
     {
         let mut params = Params::new();
 
-        match tokens.next() {
-            Some("wtime") => {
-                if let Some(value) = self.parse_millis(tokens.next()) {
-                    params.set_wtime(value);
-                }
-            }
-            Some("btime") => {
-                if let Some(value) = self.parse_millis(tokens.next()) {
-                    params.set_btime(value);
-                }
-            }
-            Some("winc") => {
-                if let Some(value) = self.parse_millis(tokens.next()) {
-                    params.set_winc(value);
-                }
-            }
-            Some("binc") => {
-                if let Some(value) = self.parse_millis(tokens.next()) {
-                    params.set_binc(value);
-                }
-            }
-            Some("movetime") => {
-                if let Some(value) = self.parse_millis(tokens.next()) {
-                    params.set_movetime(value);
-                }
-            }
-            Some("depth") => {
-                if let Ok(value) = tokens.next().unwrap_or("").parse::<u16>() {
-                    params.set_depth(value);
-                }
-            }
-            Some("nodes") => {
-                if let Ok(value) = tokens.next().unwrap_or("").parse::<u64>() {
-                    params.set_nodes(value);
-                }
-            }
-            Some("mate") => {
-                if let Ok(value) = tokens.next().unwrap_or("").parse::<u16>() {
-                    params.set_mate(value);
-                }
-            }
-            Some("searchmoves") => {
-                let mut moves = Vec::new();
-                for token in tokens {
-                    if let Ok(value) = token.parse::<Square>() {
-                        moves.push(value);
+        let tokens = tokens.collect::<Vec<_>>();
+        let mut i = 0;
+
+        while i < tokens.len() {
+            match tokens[i] {
+                "wtime" => {
+                    if let Some(value) = self.parse_millis(tokens.get(i + 1).cloned()) {
+                        params.set_wtime(value);
+                        i += 1;
                     }
                 }
-                params.set_searchmoves(moves.as_slice());
+                "btime" => {
+                    if let Some(value) = self.parse_millis(tokens.get(i + 1).cloned()) {
+                        params.set_btime(value);
+                        i += 1;
+                    }
+                }
+                "winc" => {
+                    if let Some(value) = self.parse_millis(tokens.get(i + 1).cloned()) {
+                        params.set_winc(value);
+                        i += 1;
+                    }
+                }
+                "binc" => {
+                    if let Some(value) = self.parse_millis(tokens.get(i + 1).cloned()) {
+                        params.set_binc(value);
+                        i += 1;
+                    }
+                }
+                "movetime" => {
+                    if let Some(value) = self.parse_millis(tokens.get(i + 1).cloned()) {
+                        params.set_movetime(value);
+                        i += 1;
+                    }
+                }
+                "depth" => {
+                    if let Ok(value) = tokens.get(i + 1).cloned().unwrap_or("").parse::<u16>() {
+                        params.set_depth(value);
+                        i += 1;
+                    }
+                }
+                "nodes" => {
+                    if let Ok(value) = tokens.get(i + 1).cloned().unwrap_or("").parse::<u64>() {
+                        params.set_nodes(value);
+                        i += 1;
+                    }
+                }
+                "mate" => {
+                    if let Ok(value) = tokens.get(i + 1).cloned().unwrap_or("").parse::<u16>() {
+                        params.set_mate(value);
+                        i += 1;
+                    }
+                }
+                "searchmoves" => {
+                    let mut moves = Vec::new();
+                    while i < tokens.len() {
+                        if let Ok(value) = tokens[i].parse::<Square>() {
+                            moves.push(value);
+                        }
+                        i += 1;
+                    }
+                    params.set_searchmoves(moves.as_slice());
+                    break;
+                }
+                _ => break,
             }
-            _ => (),
+
+            i += 1;
         }
+
         search::run_search(board, &params)
     }
 
