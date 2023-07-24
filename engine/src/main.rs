@@ -10,6 +10,8 @@ use crate::core::types::{File, Rank, Square};
 fn main() {
     let mut board = Board::new();
 
+    println!("{}", core::bitboard::Bitboard::LEFT_EDGE);
+
     board.push(Square::from(File::new(9), Rank::new(9)));
     board.push(Square::from(File::new(10), Rank::new(9)));
     board.push(Square::from(File::new(8), Rank::new(8)));
