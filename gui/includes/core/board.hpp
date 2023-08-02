@@ -12,31 +12,28 @@
 
 #pragma once
 
-#include "bitboard.hpp"
-#include "stone.hpp"
-#include "square.hpp"
+#include "core/bitboard.hpp"
+#include "core/square.hpp"
+#include "core/stone.hpp"
 
 #include <array>
 #include <ostream>
 
-class Board
-{
-private:
+class Board {
+ private:
     std::array<BitBoard, 2> _bitsets;
     std::array<Stone, BOARD_SIZE> _table;
     Stone _turn;
 
-public:
-    Board()
-    {
+ public:
+    Board() {
         _bitsets[0] = BitBoard();
         _bitsets[1] = BitBoard();
         _table.fill(Stone::Empty);
         _turn = Stone::Black;
     }
 
-    static Board from_raw_parts(BitBoard black, BitBoard white, Stone turn)
-    {
+    static Board from_raw_parts(BitBoard black, BitBoard white, Stone turn) {
         Board b;
         b._bitsets[0] = black;
         b._bitsets[1] = white;
@@ -51,29 +48,25 @@ public:
         return b;
     }
 
-    BitBoard bitboard(Stone side)
-    {
+    BitBoard bitboard(Stone side) {
         if (side == Stone::Empty)
             return ~(_bitsets[Stone::Black] | _bitsets[Stone::White]);
         return _bitsets[side];
     }
 
-    void push(Square sq)
-    {
+    void push(Square sq) {
         _table[sq.value] = _turn;
         _bitsets[_turn].set_square(sq);
         _turn = flip(_turn);
     }
 
-    void pop(Square sq)
-    {
+    void pop(Square sq) {
         _turn = flip(_turn);
         _bitsets[_turn].rst_square(sq);
         _table[sq.value] = Stone::Empty;
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const Board &b)
-    {
+    friend std::ostream &operator<<(std::ostream &os, const Board &b) {
         os << "black:\n"
            << b._bitsets[0] << "\nwhite:\n"
            << b._bitsets[1] << "\nturn: " << b._turn;

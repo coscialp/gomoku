@@ -18,17 +18,14 @@
 /// @param Black is used to represent a black stone
 /// @param White is used to represent a white stone
 /// @param Empty is used to represent an empty square
-enum Stone
-{
+enum Stone {
     Black,
     White,
     Empty,
 };
 
-inline Stone flip(Stone stone)
-{
-    switch (stone)
-    {
+inline Stone flip(Stone stone) {
+    switch (stone) {
     case Stone::Black:
         return Stone::White;
     case Stone::White:

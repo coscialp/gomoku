@@ -30,7 +30,6 @@ SOURCES += \
 INCLUDEPATH += includes
 
 HEADERS += \
-    includes/mainwindow.h \
     includes/utils/logger.hpp \
     includes/ugmi_protocol.hpp \
     includes/core/bitboard_constant.hpp \
@@ -43,7 +42,6 @@ HEADERS += \
     includes/core/board.hpp
 
 FORMS += \
-    views/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

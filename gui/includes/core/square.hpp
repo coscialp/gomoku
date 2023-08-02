@@ -16,27 +16,26 @@
 #include "core/file.hpp"
 #include "core/rank.hpp"
 
-#include <ostream>
 #include <cstdint>
+#include <ostream>
 
 constexpr uint16_t ROW_SIZE = 19;
 constexpr uint16_t BOARD_SIZE = ROW_SIZE * ROW_SIZE;
 
-struct Square
-{
+struct Square {
     uint16_t value;
 
-    constexpr Square(uint16_t _value) : value(_value) {}
+    explicit constexpr Square(uint16_t _value) : value(_value) {}
 
-    static constexpr Square from(File file, Rank rank) { return Square(file.value + uint16_t(rank.value) * ROW_SIZE); }
+    static constexpr Square from(File file, Rank rank) {
+        return Square(file.value + uint16_t(rank.value) * ROW_SIZE);
+    }
 
     File file() const { return File(this->value % ROW_SIZE); }
     Rank rank() const { return Rank(this->value / ROW_SIZE); }
 
-    constexpr Square shift(Direction direction) const
-    {
-        switch (direction)
-        {
+    constexpr Square shift(Direction direction) const {
+        switch (direction) {
         case Direction::North:
             return Square(this->value - ROW_SIZE);
         case Direction::NorthEast:
@@ -56,33 +55,37 @@ struct Square
         }
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const Square &s)
-    {
+    friend std::ostream &operator<<(std::ostream &os, const Square &s) {
         return os << s.file() << s.rank();
     }
 
-    constexpr Square operator+(uint16_t value) { return Square(this->value + value); }
-    constexpr Square operator-(uint16_t value) { return Square(this->value - value); }
-    constexpr Square &operator+=(uint16_t value)
-    {
+    constexpr Square operator+(uint16_t value) {
+        return Square(this->value + value);
+    }
+    constexpr Square operator-(uint16_t value) {
+        return Square(this->value - value);
+    }
+    constexpr Square &operator+=(uint16_t value) {
         this->value += value;
         return *this;
     }
-    constexpr Square &operator-=(uint16_t value)
-    {
+    constexpr Square &operator-=(uint16_t value) {
         this->value -= value;
         return *this;
     }
 
-    constexpr bool operator==(const Square &other) const { return this->value == other.value; }
-    constexpr bool operator!=(const Square &other) const { return this->value != other.value; }
+    constexpr bool operator==(const Square &other) const {
+        return this->value == other.value;
+    }
+    constexpr bool operator!=(const Square &other) const {
+        return this->value != other.value;
+    }
 };
 
-namespace SquareConstants
-{
-    constexpr File FIRST_FILE = 0;
-    constexpr File LAST_FILE = 18;
-    constexpr Rank FIRST_RANK = 0;
-    constexpr Rank LAST_RANK = 18;
-    constexpr Square OUT_OF_BOARD = Square(BOARD_SIZE);
-}
+namespace SquareConstants {
+constexpr File FIRST_FILE = File(0);
+constexpr File LAST_FILE = File(18);
+constexpr Rank FIRST_RANK = Rank(0);
+constexpr Rank LAST_RANK = Rank(18);
+constexpr Square OUT_OF_BOARD = Square(BOARD_SIZE);
+}  // namespace SquareConstants

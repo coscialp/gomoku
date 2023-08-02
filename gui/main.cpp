@@ -10,19 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mainwindow.h"
-#include "utils/logger.hpp"
-#include "core/square.hpp"
-#include "core/bitboard_constant.hpp"
 #include "core/bitboard.hpp"
+#include "core/bitboard_constant.hpp"
 #include "core/board.hpp"
+#include "core/square.hpp"
+#include "utils/logger.hpp"
 
 #include <QApplication>
 
-int main(int ac, char **av)
-{
+int main(int ac, char **av) {
     QApplication a(ac, av);
-    // MainWindow w;
 
     Logger<std::string>::info("Starting GUI");
     Logger<std::string>::debug("Connecting to server");
@@ -34,6 +31,5 @@ int main(int ac, char **av)
     Logger<BitBoard>::info(BitBoardConstant::RIGHT_EDGE, true);
     Logger<BitBoard>::info(BitBoardConstant::BOTTOM_EDGE, true);
 
-    // w.show();
     return a.exec();
 }

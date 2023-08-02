@@ -12,54 +12,65 @@
 
 #pragma once
 
-#include <ostream>
 #include <cstdint>
+#include <ostream>
 
-struct File
-{
+struct File {
     uint8_t value;
 
-    constexpr File(uint8_t _value) : value(_value) {}
-    friend std::ostream &operator<<(std::ostream &os, const File &f) { return os << ('a' + f.value); }
-    constexpr File operator+(uint8_t value) { return File(this->value + value); }
-    constexpr File operator-(uint8_t value) { return File(this->value - value); }
-    constexpr File &operator+=(uint8_t value)
-    {
+    explicit constexpr File(uint8_t _value) : value(_value) {}
+    friend std::ostream &operator<<(std::ostream &os, const File &f) {
+        return os << ('a' + f.value);
+    }
+    constexpr File operator+(uint8_t value) {
+        return File(this->value + value);
+    }
+    constexpr File operator-(uint8_t value) {
+        return File(this->value - value);
+    }
+    constexpr File &operator+=(uint8_t value) {
         this->value += value;
         return *this;
     }
-    constexpr File &operator-=(uint8_t value)
-    {
+    constexpr File &operator-=(uint8_t value) {
         this->value -= value;
         return *this;
     }
-    constexpr File operator++(int)
-    {
+    constexpr File operator++(int) {
         File tmp(*this);
         operator++();
         return tmp;
     }
-    constexpr File &operator++()
-    {
+    constexpr File &operator++() {
         value++;
         return *this;
     }
-    constexpr File operator--(int)
-    {
+    constexpr File operator--(int) {
         File tmp(*this);
         operator--();
         return tmp;
     }
-    constexpr File &operator--()
-    {
+    constexpr File &operator--() {
         value--;
         return *this;
     }
 
-    constexpr bool operator==(const File &rhs) const { return value == rhs.value; }
-    constexpr bool operator!=(const File &rhs) const { return value != rhs.value; }
-    constexpr bool operator<(const File &rhs) const { return value < rhs.value; }
-    constexpr bool operator>(const File &rhs) const { return value > rhs.value; }
-    constexpr bool operator<=(const File &rhs) const { return value <= rhs.value; }
-    constexpr bool operator>=(const File &rhs) const { return value >= rhs.value; }
+    constexpr bool operator==(const File &rhs) const {
+        return value == rhs.value;
+    }
+    constexpr bool operator!=(const File &rhs) const {
+        return value != rhs.value;
+    }
+    constexpr bool operator<(const File &rhs) const {
+        return value < rhs.value;
+    }
+    constexpr bool operator>(const File &rhs) const {
+        return value > rhs.value;
+    }
+    constexpr bool operator<=(const File &rhs) const {
+        return value <= rhs.value;
+    }
+    constexpr bool operator>=(const File &rhs) const {
+        return value >= rhs.value;
+    }
 };

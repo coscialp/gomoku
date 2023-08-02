@@ -12,8 +12,7 @@
 
 #pragma once
 
-enum Direction
-{
+enum Direction {
     North,
     South,
     East,
