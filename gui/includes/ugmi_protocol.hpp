@@ -15,6 +15,7 @@
 #include <array>
 #include <iostream>
 #include <map>
+#include <string>
 #include <vector>
 
 #include <QProcess>
@@ -47,7 +48,8 @@ class UgmiProtocol {
     QProcess _process = QProcess();
 
  public:
-    UgmiProtocol(const QString &program, const QStringList &arguments = {})
+    explicit UgmiProtocol(const QString &program,
+                          const QStringList &arguments = {})
         : _program(program), _arguments(arguments) {}
     ~UgmiProtocol() {}
 
@@ -124,7 +126,7 @@ class UgmiProtocol {
         /// waiting. The name and value of the option are case-sensitive, and
         /// can both include spaces. The substrings `name` and `value` must not
         /// be used for the `option_name` and
-        ///`option_value` fields to disambiguate parsing. This is also the case
+        /// `option_value` fields to disambiguate parsing. This is also the case
         /// for the `option` commands sent by the engine.
         /// @param name The name of the option to set
         /// @param value The value of the option to set (optional). Default is
@@ -160,7 +162,7 @@ class UgmiProtocol {
         /// number of search parameters that can follow this command. If no
         /// search parameters affecting the search limits (that is, any
         /// parameter except for
-        ///`searchmoves`) are specified the engine must run in infinite mode,
+        /// `searchmoves`) are specified the engine must run in infinite mode,
         /// which
         /// means it must not send a `bestmove` command until a `stop` command
         /// is issued.

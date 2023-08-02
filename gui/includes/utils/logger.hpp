@@ -64,9 +64,10 @@ template <class T, std::ostream &out = std::cout> class Logger {
     ~Logger() {}
 
  public:
-    ///  \brief Log a message with a level and the current time in UTC
-    ///  \param level Level of the message can be INFO, DEBUG, WARNING, ERROR,
-    ///  FATAL \param message Message to log
+    ///  @brief Log a message with a level and the current time in UTC
+    ///  @param level Level of the message can be:
+    ///     INFO, DEBUG, WARNING, ERROR, FATAL
+    ///  @param message Message to log
     static void log(LoggerLevel level, T message, bool multiline = false) {
         out << Logger<T, out>::get_utc_time() << " "
             << Logger<T, out>::level_to_color(level);

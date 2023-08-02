@@ -18,6 +18,7 @@
 
 #include <cstdint>
 #include <ostream>
+#include <string>
 
 constexpr uint16_t ROW_SIZE = 19;
 constexpr uint16_t BOARD_SIZE = ROW_SIZE * ROW_SIZE;
@@ -29,6 +30,13 @@ struct Square {
 
     static constexpr Square from(File file, Rank rank) {
         return Square(file.value + uint16_t(rank.value) * ROW_SIZE);
+    }
+
+    static Square from_str(std::string s) {
+        std::string f = s.substr(0, 1);
+        std::string r = s.substr(1);
+
+        return Square::from(File::from_str(f), Rank::from_str(r));
     }
 
     File file() const { return File(this->value % ROW_SIZE); }
