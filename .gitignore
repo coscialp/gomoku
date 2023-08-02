@@ -23,3 +23,11 @@ __pycache__/
 .env
 .venv/
 .mypy_cache/
+
+# Qt Creator files
+*.autosave
+*.creator.user
+*.user
+*.pro.user
+*.pro.user.*
+build/
